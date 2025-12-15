@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: re-service
+spec:
+  selector:
+    app: kaayaka-re
+  ports:
+    - port: 80
+      targetPort: 80

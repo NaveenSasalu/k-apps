@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kaayaka-re
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kaayaka-re
+  template:
+    metadata:
+      labels:
+        app: kaayaka-re
+    spec:
+      containers:
+        - name: kaayaka-re
+          image: naveensasalu/kayaka-re:latest
+          ports:
+            - containerPort: 80
