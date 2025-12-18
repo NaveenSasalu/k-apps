@@ -4,7 +4,7 @@ metadata:
   name: m-website
   namespace: m-site
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: m-website
