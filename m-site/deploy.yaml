@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: m-website
+  namespace: m-site
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: m-website
+  template:
+    metadata:
+      labels:
+        app: m-website
+    spec:
+      containers:
+        - name: website
+          # Replace <your-docker-username> with your actual DockerHub ID
+          image: docker.io/naveensasalu/kaayaka-website:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
