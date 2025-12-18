@@ -12,7 +12,7 @@ spec:
   tls:
     - hosts:
         - kaayaka.in
-      secretName: web-tls
+      secretName: mweb-tls
   rules:
     - host: "kaayaka.in"
       http:
