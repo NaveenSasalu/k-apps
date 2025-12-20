@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
         - name: fend-multi-ride
-          image: naveensasalu/multi-ride-frontend:latest
+          image: naveensasalu/multi-ride-frontend:1.0.1
           ports:
             - containerPort: 80
