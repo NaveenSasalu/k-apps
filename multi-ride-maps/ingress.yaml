@@ -9,10 +9,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - maps.mydomain.in
+        - maps.kaayaka.in
       secretName: maps-api-tls
   rules:
-    - host: maps.mydomain.in
+    - host: maps.kaayaka.in
       http:
         paths:
           - path: /api
