@@ -6,7 +6,6 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-http
     kubernetes.io/ingress.class: nginx
 spec:
-  ingressClassName: nginx
   tls:
     - hosts:
         - maps.kaayaka.in
@@ -19,13 +18,13 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: backend-service
+                name: svc-be-multi-ride
                 port:
                   number: 5000
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: frontend-service
+                name: svc-fe-multi-ride
                 port:
                   number: 80
