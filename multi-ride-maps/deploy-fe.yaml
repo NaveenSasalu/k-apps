@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dp-fe-multi-ride
+  namespace: multi-ride-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-multi-ride
+  template:
+    metadata:
+      labels:
+        app: app-multi-ride
+    spec:
+      containers:
+        - name: fend-multi-ride
+          image: naveensasalu//multi-ride-frontend:latest
+          ports:
+            - containerPort: 80

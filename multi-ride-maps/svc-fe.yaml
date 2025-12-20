@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-fe-multi-ride
+  namespace: multi-ride-ns
+spec:
+  selector:
+    app: app-multi-ride
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
