@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dp-fe-multi-ride
+  name: dp-be-multi-ride
   namespace: multi-ride-ns
 spec:
   replicas: 1
