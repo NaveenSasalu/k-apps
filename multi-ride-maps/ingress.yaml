@@ -16,6 +16,7 @@ spec:
       http:
         paths:
           - path: /api/(.*) # Captures everything after /api
+            pathType: ImplementationSpecific # 
             pathType: Prefix
             backend:
               service:
