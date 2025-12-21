@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: bend-multi-ride
-          image: naveensasalu/multi-ride-backend:latest
+          image: naveensasalu/multi-ride-backend:1.0.1
           ports:
             - containerPort: 5000
           env:
