@@ -9,22 +9,25 @@ spec:
       containers:
         - name: init-data
           image: naveensasalu/farm-backend:1.0.2
-          # This command runs both scripts in order
           command:
-            [
-              "/bin/sh",
-              "-c",
-              "python app/initial_data.py && python app/seed_db.py",
-            ]
+            - "/bin/sh"
+            - "-c"
+            - |
+              # Wait for DB using python
+              python -c "import socket, time; 
+              while True:
+                  try:
+                      with socket.create_connection(('postgres-service.infra.svc.cluster.local', 5432), timeout=1):
+                          break
+                  except:
+                      time.sleep(1)"
+
+              # Run scripts as modules
+              python -m app.initial_data && python -m app.seed_db
           env:
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: farm-secrets
                   key: database-url
-            - name: SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: farm-secrets
-                  key: jwt-secret-key
       restartPolicy: OnFailure
