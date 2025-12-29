@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: farm-backend
+  namespace: multi-farm
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: naveensasalu/farm-backend:1.0.7
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          env:
+            # Secrets from the 'multi-farm' namespace
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: farm-secrets
+                  key: jwt-secret-key
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: farm-secrets
+                  key: minio-root-user
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: farm-secrets
+                  key: minio-password
+            # Connection to Postgres in the 'infra' namespace
+            - name: DATABASE_URL
+              value: "postgresql+asyncpg://farmuser:$(POSTGRES_PASSWORD)@postgres-service.infra.svc.cluster.local:5432/farmdb"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: farm-secrets
+                  key: postgres-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: multi-farm
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
