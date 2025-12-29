@@ -6,11 +6,11 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-http"
     kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    #nginx.ingress.kubernetes.io/proxy-body-size: "10m"
     # Essential for FastAPI behind a proxy
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-      proxy_set_header X-Forwarded-Proto $scheme;
+    #nginx.ingress.kubernetes.io/configuration-snippet: |
+    #  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    #  proxy_set_header X-Forwarded-Proto $scheme;
 spec:
   #ingressClassName: nginx
   tls:
@@ -42,4 +42,4 @@ spec:
               service:
                 name: frontend-service
                 port:
-                  number: 3000
+                  - number: 80
