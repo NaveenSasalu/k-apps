@@ -28,9 +28,30 @@ spec:
               # Run scripts as modules
               python -m app.initial_data && python -m app.seed_db
           env:
+            # 1. Database Connection
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: farm-secrets
                   key: database-url
+
+            # 2. Security Key (Required by your config.py)
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: farm-secrets
+                  key: SECRET_KEY
+
+            # 3. MinIO Credentials (Required by your config.py)
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: farm-secrets
+                  key: MINIO_ACCESS_KEY
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: farm-secrets
+                  key: MINIO_SECRET_KEY
+
       restartPolicy: OnFailure
