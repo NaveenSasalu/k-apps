@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
         - name: init-data
-          image: naveensasalu/farm-backend:1.0.1
+          image: naveensasalu/farm-backend:1.0.2
           # This command runs both scripts in order
           command:
             [
