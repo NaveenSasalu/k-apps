@@ -1,20 +1,22 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: init-farm-data
+  generateName: init-farm-data-
   namespace: multi-farm
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
 spec:
   template:
     spec:
       containers:
         - name: init-data
           image: naveensasalu/farm-backend:1.0.1
-          # This command runs both scripts in order
           command:
             [
               "/bin/sh",
               "-c",
-              "python app/initial_data.py && python app/seed_db.py",
+              "until pg_isready -d $DATABASE_URL; do sleep 3; done && python app/initial_data.py && python app/seed_db.py",
             ]
           env:
             - name: DATABASE_URL
