@@ -21,6 +21,10 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
+          env:
+            - name: NEXT_PUBLIC_API_URL
+              # Do NOT use localhost here. Use the public domain.
+              value: "https://of.kaayaka.in/api/v1"
 ---
 apiVersion: v1
 kind: Service
