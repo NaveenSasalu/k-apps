@@ -3,6 +3,9 @@ kind: Job
 metadata:
   name: init-farm-data
   namespace: multi-farm
+  annotations:
+    # This tells ArgoCD to delete and recreate the Job if it changes
+    argocd.argoproj.io/sync-options: Force=true,Replace=true
 spec:
   template:
     spec:
