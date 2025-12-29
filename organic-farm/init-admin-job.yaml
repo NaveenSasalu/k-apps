@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
         - name: init-data
-          image: naveensasalu/farm-backend:1.0.3
+          image: naveensasalu/farm-backend:1.0.4
           command:
             - "/bin/sh"
             - "-c"
