@@ -40,12 +40,10 @@ spec:
                   key: minio-password
             # Connection to Postgres in the 'infra' namespace
             - name: DATABASE_URL
-              value: "postgresql+asyncpg://farmuser:$(POSTGRES_PASSWORD)@postgres-service.infra.svc.cluster.local:5432/farmdb"
-            - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: farm-secrets
-                  key: postgres-password
+                  key: database-url
 ---
 apiVersion: v1
 kind: Service
