@@ -11,7 +11,7 @@ spec:
   tls:
     - hosts:
         - mnio.kaayaka.in # Or your specific MinIO domain
-      secretName: kaayaka-tls-secret
+      secretName: kaayaka-tls-mn-secret
   rules:
     - host: mnio.kaayaka.in
       http:
