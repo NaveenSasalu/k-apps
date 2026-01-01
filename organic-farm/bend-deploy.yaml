@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: naveensasalu/farm-backend:2.0.1
+          image: naveensasalu/farm-backend:2.0.2
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
