@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: naveensasalu/farm-backend:1.0.2
+          image: naveensasalu/farm-backend:2.0.1
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
@@ -44,6 +44,11 @@ spec:
                 secretKeyRef:
                   name: farm-secrets
                   key: database-url
+            - name: MINIO_EXTERNAL_URL
+              value: "https://mnio.kaayaka.in"
+            - name: ALLOWED_ORIGINS
+              value: "https://of.kaayaka.in"
+
 ---
 apiVersion: v1
 kind: Service
