@@ -1,0 +1,32 @@
+# HTTPRoute for maps.kaayaka.in (Multi-Ride Maps)
+# Replaces ingress.yaml after migration
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: maps-routes
+  namespace: multi-ride-ns
+spec:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik-system
+      sectionName: https
+  hostnames:
+    - "maps.kaayaka.in"
+  rules:
+    # Backend API - more specific path first
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+      backendRefs:
+        - name: svc-be-multi-ride
+          port: 5000
+    # Frontend - catch-all
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: svc-fe-multi-ride
+          port: 80

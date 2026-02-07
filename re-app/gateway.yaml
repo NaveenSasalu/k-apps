@@ -1,0 +1,23 @@
+# HTTPRoute for re.kaayaka.in (Real Estate app)
+# Replaces ingress.yaml after migration
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: re-routes
+  namespace: default
+spec:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik-system
+      sectionName: https
+  hostnames:
+    - "re.kaayaka.in"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: re-service
+          port: 80
