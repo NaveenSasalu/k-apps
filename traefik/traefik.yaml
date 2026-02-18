@@ -116,8 +116,8 @@ spec:
           args:
             - --entryPoints.metrics.address=:9101/tcp
             - --entryPoints.traefik.address=:8080/tcp
-            - --entryPoints.web.address=:8000/tcp
-            - --entryPoints.websecure.address=:8443/tcp
+            - --entryPoints.web.address=:80/tcp
+            - --entryPoints.websecure.address=:443/tcp
             - --api.dashboard=true
             - --ping=true
             - --metrics.prometheus=true
@@ -146,10 +146,10 @@ spec:
               containerPort: 8080
               protocol: TCP
             - name: web
-              containerPort: 8000
+              containerPort: 80
               protocol: TCP
             - name: websecure
-              containerPort: 8443
+              containerPort: 443
               protocol: TCP
           livenessProbe:
             httpGet:

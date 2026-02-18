@@ -54,14 +54,14 @@ spec:
     # HTTP listener - redirects to HTTPS
     - name: http
       protocol: HTTP
-      port: 8000
+      port: 80
       allowedRoutes:
         namespaces:
           from: All
     # HTTPS listener with TLS
     - name: https
       protocol: HTTPS
-      port: 8443
+      port: 443
       tls:
         mode: Terminate
         certificateRefs:
