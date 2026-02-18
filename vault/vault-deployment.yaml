@@ -103,13 +103,13 @@ spec:
                 - IPC_LOCK
           readinessProbe:
             httpGet:
-              path: /v1/sys/health?standbyok=true
+              path: /v1/sys/health?standbyok=true&uninitcode=200&sealedcode=200
               port: 8200
             initialDelaySeconds: 5
             periodSeconds: 5
           livenessProbe:
             httpGet:
-              path: /v1/sys/health?standbyok=true
+              path: /v1/sys/health?standbyok=true&uninitcode=200&sealedcode=200
               port: 8200
             initialDelaySeconds: 30
             periodSeconds: 15
