@@ -39,6 +39,7 @@ spec:
 
     - arg.kaayaka.in
     - graf.kaayaka.in
+    - vault.kaayaka.in
 
 ---
 # The actual Gateway resource
