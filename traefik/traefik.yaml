@@ -104,9 +104,6 @@ spec:
       hostNetwork: true
       terminationGracePeriodSeconds: 60
       securityContext:
-        runAsGroup: 65532
-        runAsNonRoot: true
-        runAsUser: 65532
         seccompProfile:
           type: RuntimeDefault
       containers:
