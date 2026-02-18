@@ -20,7 +20,7 @@ spec:
             value: /
       backendRefs:
         - name: minio-service
-          port: 9000
+          port: 9001
       # Handle large file uploads
       timeouts:
         request: 300s

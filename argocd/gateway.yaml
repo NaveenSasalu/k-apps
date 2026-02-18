@@ -1,5 +1,5 @@
 # HTTPRoute for arg.kaayaka.in (ArgoCD)
-# ArgoCD server uses HTTPS backend on port 443
+# ArgoCD server uses HTTP backend on port 80 (--insecure mode)
 
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -20,4 +20,4 @@ spec:
             value: /
       backendRefs:
         - name: argocd-server
-          port: 443
+          port: 80
