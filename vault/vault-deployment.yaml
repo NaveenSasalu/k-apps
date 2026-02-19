@@ -71,6 +71,12 @@ spec:
         app: vault
     spec:
       serviceAccountName: vault
+      securityContext:
+        runAsUser: 100
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: vault
           image: hashicorp/vault:1.15
@@ -99,7 +105,10 @@ spec:
               memory: "512Mi"
               cpu: "200m"
           securityContext:
+            allowPrivilegeEscalation: false
             capabilities:
+              drop:
+                - ALL
               add:
                 - IPC_LOCK
           readinessProbe:

@@ -13,11 +13,20 @@ spec:
       labels:
         app: m-website
     spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: website
-          # Replace <your-docker-username> with your actual DockerHub ID
           image: docker.io/naveensasalu/kaayaka-website:latest
           imagePullPolicy: Always
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
           ports:
             - containerPort: 80
           resources:

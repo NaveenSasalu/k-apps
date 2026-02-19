@@ -165,7 +165,11 @@ spec:
             timeoutSeconds: 2
             failureThreshold: 1
           securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
             capabilities:
+              drop:
+                - ALL
               add:
                 - NET_BIND_SERVICE
           volumeMounts:

@@ -17,6 +17,8 @@ metadata:
   namespace: infra
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: minio
@@ -25,13 +27,34 @@ spec:
       labels:
         app: minio
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: minio
-          image: minio/minio
+          image: minio/minio:RELEASE.2024-11-07T00-52-20Z
           args: ["server", "/data", "--console-address", ":9001"]
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
           env:
             - name: MINIO_ROOT_USER
-              value: $MINIO_ROOT_USER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: farm-secrets
+                  key: minio-root-user
             - name: MINIO_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
