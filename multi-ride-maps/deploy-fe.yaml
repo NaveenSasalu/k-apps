@@ -14,7 +14,8 @@ spec:
         app: app-multi-ride
     spec:
       securityContext:
-        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
         seccompProfile:
           type: RuntimeDefault
       containers:
@@ -22,10 +23,12 @@ spec:
           image: naveensasalu/multi-ride-frontend:1.0.1
           securityContext:
             allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - ALL
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
           resources:
             requests:
               cpu: "50m"
@@ -41,3 +44,6 @@ spec:
                 secretKeyRef:
                   name: maps-secrets # The name of the K8s Secret
                   key: GOOGLE_API_KEY # The key inside that Secret
+      volumes:
+        - name: tmp
+          emptyDir: {}

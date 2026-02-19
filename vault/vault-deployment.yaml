@@ -72,11 +72,17 @@ spec:
     spec:
       serviceAccountName: vault
       securityContext:
-        runAsUser: 100
-        runAsGroup: 1000
-        fsGroup: 1000
         seccompProfile:
           type: RuntimeDefault
+      initContainers:
+        - name: fix-permissions
+          image: hashicorp/vault:1.15
+          command: ["sh", "-c", "chown -R 100:1000 /vault/data"]
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: data
+              mountPath: /vault/data
       containers:
         - name: vault
           image: hashicorp/vault:1.15
