@@ -31,17 +31,10 @@ spec:
                 - ALL
           ports:
             - containerPort: 3000
-          volumeMounts:
-            - name: tmp
-              mountPath: /tmp
-            - name: nextjs-cache
-              mountPath: /app/.next/cache
-      volumes:
-        - name: tmp
-          emptyDir: {}
-        - name: nextjs-cache
-          emptyDir: {}
-          # Health checks
+          env:
+            - name: NEXT_PUBLIC_API_URL
+              # Do NOT use localhost here. Use the public domain.
+              value: "https://of.kaayaka.in/api/v1"
           readinessProbe:
             httpGet:
               path: /
@@ -54,7 +47,6 @@ spec:
               port: 3000
             initialDelaySeconds: 30
             periodSeconds: 30
-          # Resource limits
           resources:
             requests:
               memory: "128Mi"
@@ -62,10 +54,16 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "200m"
-          env:
-            - name: NEXT_PUBLIC_API_URL
-              # Do NOT use localhost here. Use the public domain.
-              value: "https://of.kaayaka.in/api/v1"
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: nextjs-cache
+              mountPath: /app/.next/cache
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: nextjs-cache
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
