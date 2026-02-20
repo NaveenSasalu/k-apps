@@ -29,10 +29,6 @@ spec:
           volumeMounts:
             - name: tmp
               mountPath: /tmp
-            - name: nginx-cache
-              mountPath: /var/cache/nginx
-            - name: nginx-run
-              mountPath: /var/run
           resources:
             requests:
               cpu: "50m"
@@ -41,7 +37,7 @@ spec:
               cpu: "200m"
               memory: "256Mi"
           ports:
-            - containerPort: 80
+            - containerPort: 3000
           env:
             - name: GOOGLE_MAPS_API_KEY # This is the name your Node.js code looks for
               valueFrom:
@@ -50,8 +46,4 @@ spec:
                   key: GOOGLE_API_KEY # The key inside that Secret
       volumes:
         - name: tmp
-          emptyDir: {}
-        - name: nginx-cache
-          emptyDir: {}
-        - name: nginx-run
           emptyDir: {}

@@ -33,4 +33,4 @@ spec:
               cpu: "200m"
               memory: "256Mi"
           ports:
-            - containerPort: 80
+            - containerPort: 3000
