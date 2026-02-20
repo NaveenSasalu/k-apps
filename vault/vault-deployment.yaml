@@ -72,6 +72,7 @@ spec:
     spec:
       serviceAccountName: vault
       securityContext:
+        fsGroup: 1000
         seccompProfile:
           type: RuntimeDefault
       initContainers:
