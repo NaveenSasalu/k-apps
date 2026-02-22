@@ -35,8 +35,9 @@ spec:
             - containerPort: 3000
           env:
             - name: NEXT_PUBLIC_API_URL
-              # Do NOT use localhost here. Use the public domain.
               value: "https://of.kaayaka.in/api/v1"
+            - name: INTERNAL_API_URL
+              value: "http://backend-service:8000/api/v1"
           readinessProbe:
             httpGet:
               path: /
