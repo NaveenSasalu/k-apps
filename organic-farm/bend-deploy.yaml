@@ -23,8 +23,8 @@ spec:
           type: RuntimeDefault
       containers:
         - name: backend
-          image: naveensasalu/farm-backend:latest
-          imagePullPolicy: Always
+          image: naveensasalu/farm-backend:83164a24963886f12e4ab6fd29eb7ecbfcc278a2
+          imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
