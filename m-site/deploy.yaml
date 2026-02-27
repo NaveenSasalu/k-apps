@@ -34,6 +34,10 @@ spec:
           volumeMounts:
             - name: tmp
               mountPath: /tmp
+            - name: nginx-cache
+              mountPath: /var/cache/nginx
+            - name: nginx-run
+              mountPath: /run
           resources:
             limits:
               cpu: "200m"
@@ -43,4 +47,8 @@ spec:
               memory: "128Mi"
       volumes:
         - name: tmp
+          emptyDir: {}
+        - name: nginx-cache
+          emptyDir: {}
+        - name: nginx-run
           emptyDir: {}
