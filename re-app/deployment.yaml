@@ -21,6 +21,7 @@ spec:
       containers:
         - name: kaayaka-re
           image: naveensasalu/kayaka-re:latest
+          imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
@@ -36,3 +37,9 @@ spec:
               memory: "256Mi"
           ports:
             - containerPort: 3000
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
