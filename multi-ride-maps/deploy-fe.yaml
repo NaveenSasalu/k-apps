@@ -31,6 +31,8 @@ spec:
               mountPath: /tmp
             - name: nginx-cache
               mountPath: /var/cache/nginx
+            - name: nginx-run
+              mountPath: /run
           resources:
             requests:
               cpu: "50m"
@@ -50,4 +52,6 @@ spec:
         - name: tmp
           emptyDir: {}
         - name: nginx-cache
+          emptyDir: {}
+        - name: nginx-run
           emptyDir: {}
