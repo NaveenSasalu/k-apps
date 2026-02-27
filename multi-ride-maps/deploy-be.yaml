@@ -7,11 +7,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app-multi-ride
+      app: app-be-multi-ride
   template:
     metadata:
       labels:
-        app: app-multi-ride
+        app: app-be-multi-ride
     spec:
       securityContext:
         runAsUser: 1000

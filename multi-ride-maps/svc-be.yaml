@@ -5,7 +5,7 @@ metadata:
   namespace: multi-ride-ns
 spec:
   selector:
-    app: app-multi-ride
+    app: app-be-multi-ride
   ports:
     - protocol: TCP
       port: 5000
