@@ -24,7 +24,7 @@ spec:
       containers:
         - name: backend
           image: naveensasalu/farm-backend:399a03a616bc212b4ae04f5a3397a2bc536adcbb
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true

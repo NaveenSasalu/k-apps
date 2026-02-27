@@ -14,15 +14,18 @@ spec:
         app: app-be-multi-ride
     spec:
       securityContext:
+        runAsNonRoot: true
         runAsUser: 1000
         runAsGroup: 1000
         seccompProfile:
           type: RuntimeDefault
       containers:
         - name: bend-multi-ride
-          image: naveensasalu/multi-ride-backend:1.0.1
+          image: naveensasalu/multi-ride-backend:latest
+          imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - ALL

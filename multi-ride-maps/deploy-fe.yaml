@@ -14,15 +14,18 @@ spec:
         app: app-fe-multi-ride
     spec:
       securityContext:
+        runAsNonRoot: true
         runAsUser: 1000
         runAsGroup: 1000
         seccompProfile:
           type: RuntimeDefault
       containers:
         - name: fend-multi-ride
-          image: naveensasalu/multi-ride-frontend:1.0.1
+          image: naveensasalu/multi-ride-frontend:latest
+          imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
             capabilities:
               drop:
                 - ALL
