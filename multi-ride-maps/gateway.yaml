@@ -29,4 +29,4 @@ spec:
             value: /
       backendRefs:
         - name: svc-fe-multi-ride
-          port: 3000
+          port: 80
