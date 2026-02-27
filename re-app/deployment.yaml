@@ -20,7 +20,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: kaayaka-re
-          image: naveensasalu/kayaka-re:7931b2447298ae13ff052c601be41682f6d55608
+          image: naveensasalu/kayaka-re:e155124d15f14fad1d34c0f8edea8ee7aa139e93
           imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
