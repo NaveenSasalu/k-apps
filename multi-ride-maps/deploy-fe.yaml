@@ -29,6 +29,8 @@ spec:
           volumeMounts:
             - name: tmp
               mountPath: /tmp
+            - name: nginx-cache
+              mountPath: /var/cache/nginx
           resources:
             requests:
               cpu: "50m"
@@ -46,4 +48,6 @@ spec:
                   key: GOOGLE_API_KEY # The key inside that Secret
       volumes:
         - name: tmp
+          emptyDir: {}
+        - name: nginx-cache
           emptyDir: {}
