@@ -21,7 +21,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: website
-          image: docker.io/naveensasalu/kaayaka-website:latest
+          image: docker.io/naveensasalu/kaayaka-website:64cc8e3ecdc33dffebb251f1b625d24cd2651944
           imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
