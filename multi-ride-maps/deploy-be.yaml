@@ -21,7 +21,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: bend-multi-ride
-          image: naveensasalu/multi-ride-backend:latest
+          image: naveensasalu/multi-ride-backend:064c2319a8be6efcccf5fb0ca2159e9876af0c06
           imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
