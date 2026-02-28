@@ -21,7 +21,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: games
-          image: docker.io/naveensasalu/kaayaka-games:6305f0d16ca071c92f81b89d725bb4039036c989
+          image: docker.io/naveensasalu/kaayaka-games:d9da87ae6c5df774e353577c9052f438809cc045
           imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
