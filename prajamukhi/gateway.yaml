@@ -1,0 +1,42 @@
+# Temporary hostname: mag.kaayaka.in, covered by the shared kaayaka-tls SAN
+# cert in gateway-api/traefik-gateway.yaml. Will switch to prajamukhi.com
+# (its own root domain, needing a separate Certificate) once that domain's
+# DNS is set up.
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: prajamukhi-routes
+  namespace: prajamukhi
+spec:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik-system
+      sectionName: https
+  hostnames:
+    - "mag.kaayaka.in"
+  rules:
+    # PocketBase REST API, file downloads, and admin dashboard
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+        - path:
+            type: PathPrefix
+            value: /_/
+      backendRefs:
+        - name: pocketbase-service
+          port: 8090
+      filters:
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            add:
+              - name: X-Forwarded-Proto
+                value: https
+    # Frontend - catch-all
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: prajamukhi-frontend-service
+          port: 3000

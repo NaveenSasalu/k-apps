@@ -42,6 +42,11 @@ spec:
     - graf.kaayaka.in
     - vault.kaayaka.in
 
+    # Prajamukhi is temporarily served on this subdomain; will move to its
+    # own root domain (prajamukhi.com) with a separate Certificate once that
+    # domain's DNS is set up.
+    - mag.kaayaka.in
+
 ---
 # The actual Gateway resource
 apiVersion: gateway.networking.k8s.io/v1

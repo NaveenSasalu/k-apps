@@ -1,0 +1,133 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: prajamukhi-pocketbase
+  namespace: prajamukhi
+  labels:
+    app: prajamukhi-pocketbase
+    app.kubernetes.io/name: prajamukhi-pocketbase
+    app.kubernetes.io/instance: prajamukhi
+spec:
+  serviceName: "pocketbase-service"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prajamukhi-pocketbase
+  template:
+    metadata:
+      labels:
+        app: prajamukhi-pocketbase
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      # Idempotent - safe to run on every pod (re)start. Bootstraps or updates
+      # the PocketBase superuser account since there's no browser available in
+      # the cluster to click through the first-run setup link.
+      initContainers:
+        - name: bootstrap-superuser
+          image: naveensasalu/prajamukhi-backend:initial
+          command:
+            - /pb/pocketbase
+            - superuser
+            - upsert
+            - $(PB_ADMIN_EMAIL)
+            - $(PB_ADMIN_PASSWORD)
+            - --dir=/pb_data
+          env:
+            - name: PB_ADMIN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: prajamukhi-secrets
+                  key: pb-admin-email
+            - name: PB_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: prajamukhi-secrets
+                  key: pb-admin-password
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: pb-data
+              mountPath: /pb_data
+      containers:
+        - name: pocketbase
+          image: naveensasalu/prajamukhi-backend:initial
+          imagePullPolicy: Always
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          ports:
+            - containerPort: 8090
+          env:
+            - name: RAZORPAY_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: prajamukhi-secrets
+                  key: razorpay-key-id
+            - name: RAZORPAY_KEY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: prajamukhi-secrets
+                  key: razorpay-key-secret
+            - name: RAZORPAY_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: prajamukhi-secrets
+                  key: razorpay-webhook-secret
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 8090
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 8090
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "300m"
+              memory: "256Mi"
+          volumeMounts:
+            - name: pb-data
+              mountPath: /pb_data
+  volumeClaimTemplates:
+    - metadata:
+        name: pb-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pocketbase-service
+  namespace: prajamukhi
+  labels:
+    app: prajamukhi-pocketbase
+spec:
+  ports:
+    - port: 8090
+      targetPort: 8090
+      name: http
+  clusterIP: None
+  selector:
+    app: prajamukhi-pocketbase
