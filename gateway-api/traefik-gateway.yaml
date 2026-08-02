@@ -42,10 +42,27 @@ spec:
     - graf.kaayaka.in
     - vault.kaayaka.in
 
-    # Prajamukhi is temporarily served on this subdomain; will move to its
-    # own root domain (prajamukhi.com) with a separate Certificate once that
-    # domain's DNS is set up.
+    # Prajamukhi is temporarily served on this subdomain too, alongside its
+    # own root domain below - remove once prajamukhi.com DNS/cert is
+    # confirmed working end-to-end.
     - mag.kaayaka.in
+
+---
+# Separate certificate for Prajamukhi's own root domain: prajamukhi.com is
+# not a *.kaayaka.in subdomain, so it can't join the SAN cert above.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: prajamukhi-tls
+  namespace: traefik-system
+spec:
+  secretName: prajamukhi-tls
+  issuerRef:
+    name: letsencrypt-http
+    kind: ClusterIssuer
+  dnsNames:
+    - prajamukhi.com
+    - www.prajamukhi.com
 
 ---
 # The actual Gateway resource
@@ -72,6 +89,8 @@ spec:
         mode: Terminate
         certificateRefs:
           - name: kaayaka-tls
+            kind: Secret
+          - name: prajamukhi-tls
             kind: Secret
       allowedRoutes:
         namespaces:

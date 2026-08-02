@@ -1,7 +1,7 @@
-# Temporary hostname: mag.kaayaka.in, covered by the shared kaayaka-tls SAN
-# cert in gateway-api/traefik-gateway.yaml. Will switch to prajamukhi.com
-# (its own root domain, needing a separate Certificate) once that domain's
-# DNS is set up.
+# prajamukhi.com is the real domain (own Certificate in
+# gateway-api/traefik-gateway.yaml, since it's not a *.kaayaka.in
+# subdomain). mag.kaayaka.in is kept temporarily during cutover - remove
+# once prajamukhi.com DNS/cert is confirmed working end-to-end.
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -13,6 +13,8 @@ spec:
       namespace: traefik-system
       sectionName: https
   hostnames:
+    - "prajamukhi.com"
+    - "www.prajamukhi.com"
     - "mag.kaayaka.in"
   rules:
     # PocketBase REST API, file downloads, and admin dashboard
