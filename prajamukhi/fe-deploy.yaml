@@ -25,7 +25,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: frontend
-          image: naveensasalu/prajamukhi-frontend:b52a75fd497bb41607dac6714ee4f0a34cc47ffe
+          image: naveensasalu/prajamukhi-frontend:99e82c3e90271c8e154fdc016d4e487c048b9505
           imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
