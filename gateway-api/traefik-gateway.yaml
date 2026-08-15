@@ -63,6 +63,7 @@ spec:
   dnsNames:
     - prajamukhi.com
     - www.prajamukhi.com
+    - a.prajamukhi.com
 
 ---
 # The actual Gateway resource

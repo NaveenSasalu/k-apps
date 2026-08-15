@@ -15,6 +15,7 @@ spec:
   hostnames:
     - "prajamukhi.com"
     - "www.prajamukhi.com"
+    - "a.prajamukhi.com"
     - "mag.kaayaka.in"
   rules:
     # PocketBase REST API, file downloads, and admin dashboard
