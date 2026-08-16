@@ -9,9 +9,12 @@ metadata:
   namespace: prajamukhi
 spec:
   parentRefs:
+    # No sectionName: this route needs to attach to the shared "https"
+    # listener (for mag.kaayaka.in) AND the dedicated https-prajamukhi-*
+    # listeners (for prajamukhi.com/www/a) - Gateway API auto-attaches to
+    # every listener whose hostname intersects this route's hostnames below.
     - name: traefik-gateway
       namespace: traefik-system
-      sectionName: https
   hostnames:
     - "prajamukhi.com"
     - "www.prajamukhi.com"

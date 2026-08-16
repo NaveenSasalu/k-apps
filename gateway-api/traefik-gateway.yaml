@@ -91,6 +91,44 @@ spec:
         certificateRefs:
           - name: kaayaka-tls
             kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: All
+    # Traefik's Gateway provider doesn't reliably SNI-select a second cert
+    # stacked on the listener above (kaayaka-tls always won even for SNIs
+    # only prajamukhi-tls covers) - dedicated listeners per hostname sidestep
+    # that instead of relying on multi-cert SNI selection within one listener.
+    - name: https-prajamukhi-apex
+      protocol: HTTPS
+      port: 443
+      hostname: "prajamukhi.com"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: prajamukhi-tls
+            kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: https-prajamukhi-www
+      protocol: HTTPS
+      port: 443
+      hostname: "www.prajamukhi.com"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: prajamukhi-tls
+            kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: https-prajamukhi-a
+      protocol: HTTPS
+      port: 443
+      hostname: "a.prajamukhi.com"
+      tls:
+        mode: Terminate
+        certificateRefs:
           - name: prajamukhi-tls
             kind: Secret
       allowedRoutes:
