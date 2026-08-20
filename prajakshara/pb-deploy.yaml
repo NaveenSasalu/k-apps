@@ -30,7 +30,7 @@ spec:
       # the cluster to click through the first-run setup link.
       initContainers:
         - name: bootstrap-superuser
-          image: naveensasalu/prajakshara-backend:f8f679cd1aba38a8aa75aef264518b2ef70fb833
+          image: naveensasalu/prajakshara-backend:b8086e3e470999aa11a184dda345de7028d5b37a
           command:
             - /pb/pocketbase
             - superuser
@@ -61,7 +61,7 @@ spec:
               mountPath: /pb_data
       containers:
         - name: pocketbase
-          image: naveensasalu/prajakshara-backend:f8f679cd1aba38a8aa75aef264518b2ef70fb833
+          image: naveensasalu/prajakshara-backend:b8086e3e470999aa11a184dda345de7028d5b37a
           imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
