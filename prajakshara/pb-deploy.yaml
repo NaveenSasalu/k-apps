@@ -38,6 +38,8 @@ spec:
             - $(PB_ADMIN_EMAIL)
             - $(PB_ADMIN_PASSWORD)
             - --dir=/pb_data
+            - --migrationsDir=/pb/pb_migrations
+            - --hooksDir=/pb/pb_hooks
           env:
             - name: PB_ADMIN_EMAIL
               valueFrom:
