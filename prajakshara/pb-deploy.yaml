@@ -1,0 +1,140 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: prajakshara-pocketbase
+  namespace: prajakshara
+  labels:
+    app: prajakshara-pocketbase
+    app.kubernetes.io/name: prajakshara-pocketbase
+    app.kubernetes.io/instance: prajakshara
+spec:
+  serviceName: "pocketbase-service"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prajakshara-pocketbase
+  template:
+    metadata:
+      labels:
+        app: prajakshara-pocketbase
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      # Idempotent - safe to run on every pod (re)start. Bootstraps or updates
+      # the PocketBase superuser account since there's no browser available in
+      # the cluster to click through the first-run setup link.
+      initContainers:
+        - name: bootstrap-superuser
+          image: naveensasalu/prajakshara-backend:initial
+          command:
+            - /pb/pocketbase
+            - superuser
+            - upsert
+            - $(PB_ADMIN_EMAIL)
+            - $(PB_ADMIN_PASSWORD)
+            - --dir=/pb_data
+          env:
+            - name: PB_ADMIN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: prajakshara-secrets
+                  key: pb-admin-email
+            - name: PB_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: prajakshara-secrets
+                  key: pb-admin-password
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: pb-data
+              mountPath: /pb_data
+      containers:
+        - name: pocketbase
+          image: naveensasalu/prajakshara-backend:initial
+          imagePullPolicy: Always
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          ports:
+            - containerPort: 8090
+          env:
+            # GitHub asset-upload proxy (pocketbase/pb_hooks/github_upload.pb.js) -
+            # optional; the upload button just fails gracefully if unset.
+            - name: GITHUB_PAT
+              valueFrom:
+                secretKeyRef:
+                  name: prajakshara-secrets
+                  key: github-pat
+                  optional: true
+            - name: GITHUB_OWNER
+              valueFrom:
+                secretKeyRef:
+                  name: prajakshara-secrets
+                  key: github-owner
+                  optional: true
+            - name: GITHUB_REPO
+              valueFrom:
+                secretKeyRef:
+                  name: prajakshara-secrets
+                  key: github-repo
+                  optional: true
+            - name: GITHUB_BRANCH
+              value: "master"
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 8090
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 8090
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "300m"
+              memory: "256Mi"
+          volumeMounts:
+            - name: pb-data
+              mountPath: /pb_data
+  volumeClaimTemplates:
+    - metadata:
+        name: pb-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pocketbase-service
+  namespace: prajakshara
+  labels:
+    app: prajakshara-pocketbase
+spec:
+  ports:
+    - port: 8090
+      targetPort: 8090
+      name: http
+  clusterIP: None
+  selector:
+    app: prajakshara-pocketbase

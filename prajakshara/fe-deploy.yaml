@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prajakshara-frontend
+  namespace: prajakshara
+  labels:
+    app: prajakshara-frontend
+    app.kubernetes.io/name: prajakshara-frontend
+    app.kubernetes.io/instance: prajakshara
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prajakshara-frontend
+  template:
+    metadata:
+      labels:
+        app: prajakshara-frontend
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: frontend
+          image: naveensasalu/prajakshara-frontend:initial
+          imagePullPolicy: Always
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prajakshara-frontend-service
+  namespace: prajakshara
+spec:
+  selector:
+    app: prajakshara-frontend
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000

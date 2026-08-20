@@ -66,6 +66,22 @@ spec:
     - a.prajamukhi.com
 
 ---
+# Separate certificate for Prajakshara's own root domain: test.prajakshara.com
+# is not a *.kaayaka.in subdomain, so it can't join the SAN cert above.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: prajakshara-tls
+  namespace: traefik-system
+spec:
+  secretName: prajakshara-tls
+  issuerRef:
+    name: letsencrypt-http
+    kind: ClusterIssuer
+  dnsNames:
+    - test.prajakshara.com
+
+---
 # The actual Gateway resource
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
@@ -130,6 +146,18 @@ spec:
         mode: Terminate
         certificateRefs:
           - name: prajamukhi-tls
+            kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: https-prajakshara-test
+      protocol: HTTPS
+      port: 443
+      hostname: "test.prajakshara.com"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: prajakshara-tls
             kind: Secret
       allowedRoutes:
         namespaces:
