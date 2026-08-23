@@ -92,7 +92,7 @@ spec:
                   key: github-repo
                   optional: true
             - name: GITHUB_BRANCH
-              value: "master"
+              value: "main"
           readinessProbe:
             httpGet:
               path: /api/health
