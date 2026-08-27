@@ -25,7 +25,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: frontend
-          image: naveensasalu/prajakshara-frontend:be3925ee7f0ce0b0995b9c4a847022579b89134b
+          image: naveensasalu/prajakshara-frontend:282454ec9b75b77554b83cbd4e8f17970e1dbb53
           imagePullPolicy: Always
           securityContext:
             allowPrivilegeEscalation: false
