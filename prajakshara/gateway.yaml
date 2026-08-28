@@ -1,7 +1,9 @@
-# test.prajakshara.com is its own root domain (not a *.kaayaka.in
-# subdomain), so it gets its own Certificate and dedicated Gateway listener -
+# prajakshara.com is its own root domain (not a *.kaayaka.in subdomain), so
+# it gets its own Certificate and dedicated Gateway listeners per hostname -
 # see gateway-api/traefik-gateway.yaml and the Traefik multi-cert gotcha
-# noted there.
+# noted there. No sectionName here: this route needs to attach to all three
+# https-prajakshara-* listeners, and Gateway API auto-attaches to every
+# listener whose hostname intersects this route's hostnames below.
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -11,8 +13,11 @@ spec:
   parentRefs:
     - name: traefik-gateway
       namespace: traefik-system
-      sectionName: https-prajakshara-test
   hostnames:
+    - "prajakshara.com"
+    - "www.prajakshara.com"
+    # Kept temporarily during cutover - remove once prajakshara.com is
+    # confirmed working end-to-end.
     - "test.prajakshara.com"
   rules:
     # PocketBase REST API, file downloads, and admin dashboard

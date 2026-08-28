@@ -66,7 +66,7 @@ spec:
     - a.prajamukhi.com
 
 ---
-# Separate certificate for Prajakshara's own root domain: test.prajakshara.com
+# Separate certificate for Prajakshara's own root domain: prajakshara.com
 # is not a *.kaayaka.in subdomain, so it can't join the SAN cert above.
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -79,6 +79,10 @@ spec:
     name: letsencrypt-http
     kind: ClusterIssuer
   dnsNames:
+    - prajakshara.com
+    - www.prajakshara.com
+    # Kept temporarily during cutover - remove once prajakshara.com DNS/cert
+    # is confirmed working end-to-end.
     - test.prajakshara.com
 
 ---
@@ -146,6 +150,30 @@ spec:
         mode: Terminate
         certificateRefs:
           - name: prajamukhi-tls
+            kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: https-prajakshara-apex
+      protocol: HTTPS
+      port: 443
+      hostname: "prajakshara.com"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: prajakshara-tls
+            kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: https-prajakshara-www
+      protocol: HTTPS
+      port: 443
+      hostname: "www.prajakshara.com"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: prajakshara-tls
             kind: Secret
       allowedRoutes:
         namespaces:
