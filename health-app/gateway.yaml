@@ -1,0 +1,21 @@
+# HTTPRoute for health.kaayaka.in (Health Blog app)
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: health-app-routes
+  namespace: health-app
+spec:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik-system
+      sectionName: https
+  hostnames:
+    - "health.kaayaka.in"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: health-app-service
+          port: 3000
